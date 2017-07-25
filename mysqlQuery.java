@@ -3,17 +3,16 @@
  * and open the template in the editor.
  */
 
-package project;
+package hackers;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
-import com.mysql.jdbc.Statement;
+;
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -81,8 +80,7 @@ public class mysqlQuery {
          Scanner in = new Scanner(System.in);
          System.out.println("Enter your accont number");
        int AccNo = in.nextInt();
-        System.out.println("Enter your accont number");
-       Float Deposit = in.nextFloat();
+       
            {
 try {
 		Class.forName("com.mysql.jdbc.Driver");
@@ -93,19 +91,30 @@ try {
 	}
       
       try {
-         Connection conn = (Connection) DriverManager.getConnection(
+         Connection conn1 = (Connection) DriverManager.getConnection(
             "jdbc:mysql://localhost:3306/Banking?useSSL=false","root", "viki");
 
-         Statement stmt1 = (Statement) conn.createStatement();
-         String query = "update users set accountnumber = ? where cashdeposit = ?";
-          PreparedStatement preparedStmt = (PreparedStatement) conn.prepareStatement(query);
-             preparedStmt.setInt   (1, AccNo);
-             preparedStmt.setFloat   (2, Deposit);
-             preparedStmt.executeUpdate();
-             conn.close();
+           Statement stmt1 = (Statement) conn1.createStatement();
+         ResultSet rs = stmt1.executeQuery("SELECT * FROM logbook where accountnumber = '+ AccNo'");
+          System.out.println("accountnumber\t\tname\t\taddress\t\tstate\t\tcity \t\tpincode\t\tcashdeposit\t\tbalance");
+ System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+             while (rs.next()) {
+                int id = rs.getInt("accountnumber");
+            String name = rs.getString("name");
+             String address = rs.getString("address");
+              String state = rs.getString("state");
+            String city = rs.getString("city");
+            int pincode = rs.getInt("pincode");
+            int cashdeposit = rs.getInt("cashdeposit");
+            int balance = rs.getInt("balance");
+            System.out.println();
+             }
+             
+             
+             conn1.close();
       }
             catch (SQLException ex) {
-                Logger.getLogger(mysqlQuery.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("error");
             }           }
 
     }
@@ -121,23 +130,23 @@ try {
 	}
       
       try {
-         Connection con = (Connection) DriverManager.getConnection(
+         Connection connn = (Connection) DriverManager.getConnection(
             "jdbc:mysql://localhost:3306/Banking?useSSL=false","root", "viki");
 
-         Statement stmt = (Statement) con.createStatement();
-         ResultSet rs = stmt.executeQuery("SELECT * FROM logbook");
-         System.out.println("accountnumber  name   address  state  city   pincode   cashdeposit   balance");
-
+         Statement stmt1 = (Statement) connn.createStatement();
+         ResultSet rs = stmt1.executeQuery("SELECT * FROM logbook");
+         System.out.println("accountnumber\t\tname\t\taddress\t\tstate\t\tcity \t\tpincode\t\tcashdeposit\t\tbalance");
+ System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
          while (rs.next()) {
-            int id = rs.getInt("accountnumber");
-            String name = rs.getString("name");
-             String address = rs.getString("address");
-              String state = rs.getString("state");
-            String city = rs.getString("city");
-            int pincode = rs.getInt("pincode");
-            int cashdeposit = rs.getInt("cashdeposit");
-            int balance = rs.getInt("balance");  
-            System.out.println(accountnumber+"   "+name+"    "+address+"   "+state+"   "+city+"   "+pincode+"   "+cashdeposit+"   "+balance);
+             System.out.print(rs.getInt("accountnumber")+"\t\t");
+          System.out.print(rs.getString("name")+"\t\t");
+         System.out.print(rs.getString("address")+"\t\t");
+             System.out.print(rs.getString("state")+"\t\t");
+              System.out.print(rs.getString("city")+"\t\t");
+            System.out.print(rs.getInt("pincode")+"\t\t");
+         System.out.print(rs.getInt("cashdeposit")+"\t\t");
+             System.out.print(rs.getInt("balance")+"\t\t");;
+            System.out.println();
          }
       } catch(SQLException e) {
          System.out.println("SQL exception occured" + e);
